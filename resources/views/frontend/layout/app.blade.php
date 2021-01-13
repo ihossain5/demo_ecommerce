@@ -126,6 +126,28 @@
                 }
      });
         $(document).ready(function(){
+            $('.addToCart').on('click',function(e){
+                var id = $(this).data('id');
+                if (id) {
+                    $.ajax({
+                        url:"{{url('/cart/add/')}}/"+id,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(data){
+                            console.log(data);
+                        }
+                    });
+                }             
+        });
+    });
+    </script> --}}
+ <script>
+        $.ajaxSetup({
+           headers: {
+             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                }
+     });
+        $(document).ready(function(){
             $('#addToCart').submit(function(e){
                 e.preventDefault();
     
@@ -146,14 +168,14 @@
             },
                 success:function(response){
                    if(response) {
-                      window.location.reload();
-                       $("#addToCart")[0].reset();                
+                    alert(response.success);
+                    window.location.href = '/';               
                     }
                 }
             });
         });
     });
-    </script> --}}
+    </script>
 
 
 </body>

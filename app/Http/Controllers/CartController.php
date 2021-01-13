@@ -20,9 +20,9 @@ class CartController extends Controller {
 
         $cart->save();
 
-        return redirect()->back()->with('success', 'product added into cart');
+        // return redirect()->back()->with('success', 'product added into cart');
 
-        // return response()->json(['success' => 'product added to cart']);
+        return response()->json(['success' => 'product added to cart']);
     }
     static function cartItem() {
         if (auth()->user()) {
@@ -72,4 +72,18 @@ class CartController extends Controller {
             return 'null';
         }
     }
+
+    // public function AddCart($id) {
+    //     $product = Product::where('id', $id)->first();
+    //     $data    = array();
+
+    //     $user_id             = auth()->user()->id;
+    //     $data['user_id']     = $user_id;
+    //     $data['product_id']  = $product->id;
+    //     $data['quantity']    = $product->price;
+    //     $data['total_price'] = $product->price;
+
+    //     Cart::create($data);
+    //     return response()->json(['success' => 'product added to cart']);
+    // }
 }

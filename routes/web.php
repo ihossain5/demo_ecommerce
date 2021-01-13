@@ -41,5 +41,7 @@ Route::post('/products/update/{cart}', [CartController::class, 'updateCart'])->n
 Route::post('/products/remove/{cart}', [CartController::class, 'removeCart'])->name('cart.remove');
 Route::get('/checkout', [CartController::class, 'checkOut'])->name('checkout');
 
+// Route::get('/cart/add/{id}', [CartController::class, 'AddCart']);
+
 Route::post('checkout/order', [OrderController::class, 'newOrder'])->name('order.new');
 Route::get('/order/', [OrderController::class, 'getOrder'])->name('order.get');

@@ -43,22 +43,22 @@
             <div class="product-section-quantity">
                 
             </div>
-            <form action="{{route('cart.add')}}" method="POST">@csrf
+            {{-- <form action="{{route('cart.add')}}" method="POST">@csrf
                 <h5>Quantity</h5> 
              <input type="number" class="form-control" name="quantity" value="1" >
                 <input type="hidden" name="product_id" value="{{$products->id}}">
                 <input type="hidden" name="product_price" value="{{$products->price}}">
 
                 <button type="submit" class="button button-plain mt-3" style="margin-left: 20px;">Add to Cart</button>
-            </form>
-                 {{-- <form action="" id="addToCart">
+            </form> --}}
+                 <form action="" id="addToCart">
                     <h5>Quantity</h5> 
                  <input type="number" class="form-control" name="quantity" value="1" >
                     <input type="hidden" name="product_id" value="{{$products->id}}">
                     <input type="hidden" name="product_price" value="{{$products->price}}">
 
                     <button type="submit" class="button button-plain addcart" style="margin-left: 20px;">Add to Cart</button>
-                </form> --}}
+                </form>
                     </div>
     </div> <!-- end product-section -->
 
