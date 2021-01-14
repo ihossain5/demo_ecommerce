@@ -32,16 +32,19 @@ Route::get('/admin/dashboard', function () {
 
 Route::resource('category', CategoryController::class);
 Route::resource('subcategory', SubCategoryController::class);
+Route::get('/subcategories/{id}', [SubCategoryController::class, 'loadSubCategory']);
 Route::resource('products', ProductController::class);
 Route::get('/products/{id}/detail/', [ProductController::class, 'getProductByID'])->name('product.detail');
 
-Route::post('/products/add/cart/', [CartController::class, 'addToCart'])->name('cart.add')->middleware('auth');
+// Route::post('/products/add/cart/', [CartController::class, 'addToCart'])->name('cart.add')->middleware('auth');
 Route::get('/products/view/cart', [CartController::class, 'viewCart'])->name('cart.show');
 Route::post('/products/update/{cart}', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/products/remove/{cart}', [CartController::class, 'removeCart'])->name('cart.remove');
 Route::get('/checkout', [CartController::class, 'checkOut'])->name('checkout');
 
-// Route::get('/cart/add/{id}', [CartController::class, 'AddCart']);
+Route::post('/cart/add/{id}', [CartController::class, 'AddCart'])->middleware('auth');
 
 Route::post('checkout/order', [OrderController::class, 'newOrder'])->name('order.new');
 Route::get('/order/', [OrderController::class, 'getOrder'])->name('order.get');
+
+Route::get('/category/{id}/products', [ProductController::class, 'getProductByCategory'])->name('category.product');

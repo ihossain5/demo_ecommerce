@@ -83,4 +83,9 @@ class SubCategoryController extends Controller {
     public function destroy(SubCategory $subCategory) {
         //
     }
+
+    public function loadSubCategory($id) {
+        $subcategory = SubCategory::where('category_id', $id)->pluck('name', 'id');
+        return response()->json($subcategory);
+    }
 }

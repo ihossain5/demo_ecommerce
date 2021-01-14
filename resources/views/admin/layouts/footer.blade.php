@@ -38,42 +38,20 @@
   </script>
 
 
-<script>
- function previewFile(input){
-        var file = $("input[type=file]").get(0).files[0];
- 
-        if(file){
-            var reader = new FileReader();
- 
-            reader.onload = function(){
-                $("#previewImg").attr("src", reader.result);
-            }
- 
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
+<script type='text/javascript'>
+  function preview_image(event) 
+  {
+   var reader = new FileReader();
+   reader.onload = function()
+   {
+    var output = document.getElementById('output_image');
+    output.src = reader.result;
+   }
+   reader.readAsDataURL(event.target.files[0]);
+  }
+  </script>
 
-<script>  
-  $(document).on("click", "#delete", function(e){
-      e.preventDefault();
-      var link = $(this).attr("href");
-         swal({
-           title: "Are you Want to delete?",
-           text: "Once Delete, This will be Permanently Delete!",
-           icon: "warning",
-           buttons: true,
-           dangerMode: true,
-         })
-         .then((willDelete) => {
-           if (willDelete) {
-                window.location.href = link;
-           } else {
-             swal("Safe Data!");
-           }
-         });
-     });
-</script>
+
 </body>
 
 </html>

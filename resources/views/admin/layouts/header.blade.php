@@ -8,6 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
+
   <link href="{{asset('admin/img/logo/logo.png')}}" rel="icon">
   <title>E-commerce</title>
   <link href="{{asset('admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">

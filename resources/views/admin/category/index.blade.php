@@ -39,7 +39,9 @@
                   <td>{{$key+1}}</td>
                   <td>{{$category->name}}</td>
                   <td>{{$category->description}}</td>
-                  <td><button class="btn btn-secondary">Edit</button></td>
+                  <td>
+                    <button class="btn btn-secondary" data-name="{{$category->name}}" data-desc="{{$category->description}}" data-toggle="modal" data-target="#editModal">Edit</button>
+                  </td>
                   <td>
                       
                       <form action="{{route('category.destroy',[$category->id])}}" method="POST">@csrf
@@ -64,13 +66,13 @@
   </div>
 
 
-   <!-- Modal Center -->
+   <!--Add Modal  -->
    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
      <div class="modal-content">
        <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalCenterTitle">Modal Vertically Centered</h5>
+         <h5 class="modal-title" id="exampleModalCenterTitle">Create new category</h5>
          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
            <span aria-hidden="true">&times;</span>
          </button>
@@ -79,21 +81,15 @@
          <form action="{{route('category.store')}}" method="POST">@csrf
             <div class="form-group">
               <label for="name">Category Name</label>
-              <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror">
-                 @error('name')
-                     <span class="text-danger">{{$message}} </span>
-                 @enderror
+              <input type="text" name="name" id="name" class="form-control">         
             </div>
             <div class="form-group">
               <label for="desc">Category Description</label>
-              <input type="text" name="description" id="desc" class="form-control @error('description') is-invalid @enderror">
-                 @error('description')
-                     <span class="text-danger">{{$message}} </span>
-                 @enderror
+              <input type="text" name="description" id="desc" class="form-control ">
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer d-grid gap-2 ">
               <button type="button" class="btn btn-info " data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
        </div>
@@ -101,4 +97,40 @@
      </div>
    </div>
  </div>
+ 
+   <!-- Edit Modal  -->
+   <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalCenterTitle">Edit category</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <form action="{{route('category.store')}}" method="POST">@csrf
+            <div class="form-group">
+              <label for="name">Category Name</label>
+              <input type="text" name="name" id="name" class="form-control">         
+            </div>
+            <div class="form-group">
+              <label for="desc">Category Description</label>
+              <input type="text" name="description" id="desc" class="form-control ">
+            </div>
+            <div class="modal-footer d-grid gap-2 ">
+              <button type="button" class="btn btn-info " data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+       </div>
+       
+     </div>
+   </div>
+ </div>
+
+
+
+
 @endsection

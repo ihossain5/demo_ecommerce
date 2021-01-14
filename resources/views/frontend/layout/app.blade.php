@@ -78,26 +78,39 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
               <li class="nav-item dropdown ">
+                @auth
                 <a class="nav-link dropdown-toggle " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Cart Items ({{$total}}) 
+                   
+                   Cart Items (<span class="cart"> {{$total}}</span> )
+                  
+                  
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="margin-left: -320px;">
                   <li>
                       <a class="dropdown-item" href="#">
-                        <ul class="shopping-cart-items">
+                        <ul class="shopping-cart-items ">
+                        
                             @foreach ($carts as $cart)
-                            <li class="clearfix">
-                              <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item1.jpg" alt="item1" />
-                              <span class="item-name">{{$cart->product->name}}</span>
-                              <span class="item-price">Price: {{$cart->product->price}}</span>
+                            <li class="clearfix ">
+                              <img src="{{asset('/storage/products/'.$cart->product->image)}}" alt="item1" height="40"/>
+                              <span class="item-name ">{{$cart->product->name}}</span>
+                              <span class="item-price ">Price: {{$cart->product->price}}</span>
                               <span class="item-quantity">Quantity: {{$cart->quantity}}</span>
                             </li>
+
                             @endforeach
+                          
+                            
                           </ul>
                       
                           <a href="{{route('cart.show')}}" class="button mt-5">View Cart</a>
                       </a>
-                   </li>                
+                   </li>
+                   @else 
+                   <li><a class="nav-link dropdown-toggle " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Cart Items 
+                  </a></li>   
+                   @endauth             
                 </ul>
               </li>
             </ul>
@@ -119,6 +132,55 @@
 
 
      {{-- Add to cart with ajax --}}
+ <script>
+        $.ajaxSetup({
+           headers: {
+             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                }
+     });
+    //     $(document).ready(function(){
+    //         $('.addToCart').submit(function(e){
+    //           e.preventDefault();
+    //             var id = $(this).data('id');
+    //           //  var quantity = $("input[name=quantity]").val();
+    //             if (id) {
+    //                 $.ajax({
+    //                     url:"{{url('/cart/add/')}}/"+id,
+    //                     type:"GET",
+    //                     dataType:"json",
+    //                     data: new FormData(this),
+    //                     success:function(response){
+    //                       alert(response.success);
+    //                       window.location.href = '/products'; 
+    //                     }
+    //                 });
+    //             }             
+    //     });
+    // });
+    $(document).on('submit', '#addToCart', function(event){
+  event.preventDefault();
+  var id = $(this).data('id');
+ 
+ 
+   $.ajax({
+    url:"{{url('/cart/add/')}}/"+id,
+    method:"POST",
+    data: new FormData(this),
+    contentType: false,
+    cache:false,
+    processData: false,
+    dataType:"json",
+    success:function(response)
+    {
+      alert(response.success);
+      console.log(response);
+      $('.cart').html(response.cartItem);
+
+    }//success end
+  });
+ 
+});
+    </script>
  {{-- <script>
         $.ajaxSetup({
            headers: {
@@ -126,33 +188,12 @@
                 }
      });
         $(document).ready(function(){
-            $('.addToCart').on('click',function(e){
-                var id = $(this).data('id');
-                if (id) {
-                    $.ajax({
-                        url:"{{url('/cart/add/')}}/"+id,
-                        type:"GET",
-                        dataType:"json",
-                        success:function(data){
-                            console.log(data);
-                        }
-                    });
-                }             
-        });
-    });
-    </script> --}}
- <script>
-        $.ajaxSetup({
-           headers: {
-             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-                }
-     });
-        $(document).ready(function(){
-            $('#addToCart').submit(function(e){
+            $('.addToCart').submit(function(e){
                 e.preventDefault();
-    
+
+            let product_id = $(this).data('id');               
             let quantity = $("input[name=quantity]").val();
-            let product_id = $("input[name=product_id]").val();
+            
             let product_price = $("input[name=product_price]").val();
             let _token   = $('meta[name="csrf-token"]').attr('content');
     
@@ -175,7 +216,7 @@
             });
         });
     });
-    </script>
+    </script> --}}
 
 
 </body>

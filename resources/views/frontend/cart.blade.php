@@ -14,7 +14,11 @@
 
 <div class="cart-section container">
     <div>       
-    <x-alert/>
+    @if (session()->has('success'))
+        <div class="alert alert-success shadow-lg p-3">
+            {{session('success')}}
+        </div>
+    @endif
     @auth
         
 
@@ -27,10 +31,11 @@
         <div class="cart-table">
                             <div class="cart-table-row">
                 <div class="cart-table-row-left">
-                    <a href="https://laravelecommerceexample.ca/shop/laptop-1"><img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-1.jpg" alt="item" class="cart-table-img"></a>
+                    <a href=""><img src="{{asset('/storage/products/'.$cart->product->image)}}" alt="item" class="cart-table-img"></a>
                     <div class="cart-item-details">
-                        <div class="cart-table-item"><a href="https://laravelecommerceexample.ca/shop/laptop-1">{{$cart->product->name}}</a></div>
-                        <div class="cart-table-description">{{$cart->product->name}}</div>
+                        <div class="cart-table-item"><a href="">{{$cart->product->name}}</a></div>
+                        <div class="cart-table-description">{!! $cart->product->description !!}</div>
+                        <div lass="cart-table-item">${{$cart->product->price }}</div>
                     </div>
                 </div>
                 <div class="cart-table-row-right">
@@ -48,7 +53,7 @@
                         </form>                      
                     </div>
                 
-                    <div style="margin-left: 35px;">${{$cart->product->price }}</div>
+                    <div style="margin-left: 35px;">${{$cart->total_price }}</div>
                 </div>
             </div> <!-- end cart-table-row -->
             
@@ -66,22 +71,7 @@
                 </form>
             </div> <!-- end have-code-container --> --}}
      
-        <div class="cart-totals">
-            <div class="cart-totals-left">
-                Shipping is free because we’re awesome like that. Also because that’s additional stuff I don’t feel like figuring out :).
-            </div>
-
-            <div class="cart-totals-right">
-                <div>
-                    
-                    <span class="cart-totals-total">Total</span>
-                </div>
-                <div class="cart-totals-subtotal">
-                  
-                    <span class="cart-totals-total">${{$cart->total_price  }}</span>
-                </div>
-            </div>                     
-        </div> <!-- end cart-totals -->
+ 
         @endforeach
         @else 
         <p>No items in cart</p>

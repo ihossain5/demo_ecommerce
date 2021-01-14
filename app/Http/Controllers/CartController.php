@@ -3,36 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller {
-    public function addToCart(Request $request) {
-        $product_id  = $request->product_id;
-        $price       = $request->product_price;
-        $quantity    = $request->quantity;
-        $total_price = $price * $quantity;
 
-        $cart              = new Cart();
-        $cart->user_id     = auth()->user()->id;
-        $cart->product_id  = $product_id;
-        $cart->quantity    = $quantity;
-        $cart->total_price = $total_price;
-
-        $cart->save();
-
-        // return redirect()->back()->with('success', 'product added into cart');
-
-        return response()->json(['success' => 'product added to cart']);
-    }
+    //count cart item
     static function cartItem() {
         if (auth()->user()) {
-            $user_id  = auth()->user()->id;
-            $cartItem = Cart::where('user_id', $user_id)->sum('quantity');
+            $user_id = auth()->user()->id;
+            // $cartItem = Cart::where('user_id', $user_id)->sum('quantity');
+            $cartItem = Cart::where('user_id', $user_id)->count();
             return $cartItem;
 
         }
     }
 
+    // view all cart item
     public function viewCart() {
         if (auth()->user()) {
             $user_id     = auth()->user()->id;
@@ -43,7 +30,7 @@ class CartController extends Controller {
             return view('frontend.cart');
         }
     }
-
+// update cart item
     public function updateCart(Request $request, Cart $cart) {
         $quantity       = $request->quantity;
         $cart->quantity = $quantity;
@@ -52,38 +39,46 @@ class CartController extends Controller {
 
         return redirect()->back()->with('success', 'cart updated');
     }
+    // remove cart item
     public function removeCart(Cart $cart) {
         $cart->delete();
         return redirect()->back()->with('success', 'cart has been deleted');
     }
-
+// show cart item into checkout page
     public function checkOut() {
         $user_id = auth()->user()->id;
         $carts   = Cart::where('user_id', $user_id)->get();
         return view('frontend.checkout', compact('carts'));
     }
-
+// view cart item into dropdown
     static function viewCartItems() {
         if (auth()->user()) {
             $user_id = auth()->user()->id;
             $carts   = Cart::where('user_id', $user_id)->get();
             return $carts;
-        } else {
-            return 'null';
         }
     }
 
-    // public function AddCart($id) {
-    //     $product = Product::where('id', $id)->first();
-    //     $data    = array();
+    public function AddCart(Request $request) {
 
-    //     $user_id             = auth()->user()->id;
-    //     $data['user_id']     = $user_id;
-    //     $data['product_id']  = $product->id;
-    //     $data['quantity']    = $product->price;
-    //     $data['total_price'] = $product->price;
+        $product  = Product::where('id', $request->product_id)->first();
+        $quantity = $request->quantity;
+        $data     = array();
 
-    //     Cart::create($data);
-    //     return response()->json(['success' => 'product added to cart']);
-    // }
+        $user_id             = auth()->user()->id;
+        $data['user_id']     = $user_id;
+        $data['product_id']  = $product->id;
+        $data['quantity']    = $quantity;
+        $data['total_price'] = $product->price * $quantity;
+
+        Cart::create($data);
+
+        if (auth()->user()) {
+            $user_id  = auth()->user()->id;
+            $cartItem = Cart::where('user_id', $user_id)->count();
+
+        }
+
+        return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem]);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -38,8 +39,16 @@ class ProductController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        //
+    public function store(StoreProductRequest $request) {
+        if ($request->hasFile('image')) {
+            $filename = $request->image->getClientOriginalName();
+            $request->image->storeAs('products', $filename, 'public');
+
+            $data          = $request->all();
+            $data['image'] = $filename;
+            Product::create($data);
+        }
+        return redirect()->back()->with('success', 'product created');
     }
 
     /**
@@ -81,6 +90,11 @@ class ProductController extends Controller {
      */
     public function destroy(Product $product) {
         //
+    }
+
+    public function getProductByCategory(Request $request, $id) {
+        $products = Product::where('category_id', $request->id)->get();
+        return view('frontend.product', compact('products'));
     }
 
 }

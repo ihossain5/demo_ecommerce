@@ -25,13 +25,13 @@
     <div class="product-section container">
         <div>
             <div class="product-section-image">
-                <img src="{{asset('frontend/storage/products/dummy/tablet-1.jpg')}}" alt="product" class="active" id="currentImage">
+                <img src="{{asset('/storage/products/'.$products->image)}}" alt="product" class="active" id="currentImage">
             </div>
       
         </div>
         <div class="product-section-information">
             <h1 class="product-section-title">{{$products->name}}</h1>
-            <div class="product-section-subtitle">{{$products->description}}</div>
+            <div class="product-section-subtitle">{!! $products->description !!}</div>
             <div><div class="badge badge-success">In Stock</div></div>
             <div class="product-section-price">${{$products->price}}</div>
 
@@ -51,14 +51,13 @@
 
                 <button type="submit" class="button button-plain mt-3" style="margin-left: 20px;">Add to Cart</button>
             </form> --}}
-                 <form action="" id="addToCart">
-                    <h5>Quantity</h5> 
-                 <input type="number" class="form-control" name="quantity" value="1" >
-                    <input type="hidden" name="product_id" value="{{$products->id}}">
-                    <input type="hidden" name="product_price" value="{{$products->price}}">
-
-                    <button type="submit" class="button button-plain addcart" style="margin-left: 20px;">Add to Cart</button>
-                </form>
+            <form action="" id="addToCart" data-id="{{$products->id}}"> @csrf 
+                <h5> Quantity</h5>             
+                <input type="number" class="form-control" name="quantity" >
+                <input type="hidden" name="product_id" value="{{$products->id}}">
+                {{-- <input type="hidden" name="product_price" value="{{$product->price}}"> --}}
+                <button  type="submit" class="btn btn-sm btn-outline-success" style="margin-left: 20px;">Add to Cart</button>
+            </form>
                     </div>
     </div> <!-- end product-section -->
 

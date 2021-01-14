@@ -17,12 +17,7 @@
     <div class="products-section container">
         
         <div class="sidebar">
-            <h3>By Category</h3>
-            <ul>  
-                @foreach ($categories as $category)  
-                <li class=""><a href="{{route('category.product', [$category->id])}}">{{$category->name}}</a></li>                 
-                @endforeach
-            </ul>
+            
         </div> <!-- end sidebar -->
         <div>
             <div class="products-header">
