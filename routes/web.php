@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
@@ -40,11 +41,14 @@ Route::get('/products/{id}/detail/', [ProductController::class, 'getProductByID'
 Route::get('/products/view/cart', [CartController::class, 'viewCart'])->name('cart.show');
 Route::post('/products/update/{cart}', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/products/remove/{cart}', [CartController::class, 'removeCart'])->name('cart.remove');
-Route::get('/checkout', [CartController::class, 'checkOut'])->name('checkout');
+Route::get('/checkout', [CouponController::class, 'checkOut'])->name('checkout');
 
-Route::post('/cart/add/{id}', [CartController::class, 'AddCart'])->middleware('auth');
+Route::post('/cart/add/{id}', [CartController::class, 'AddCart']);
 
 Route::post('checkout/order', [OrderController::class, 'newOrder'])->name('order.new');
 Route::get('/order/', [OrderController::class, 'getOrder'])->name('order.get');
 
 Route::get('/category/{id}/products', [ProductController::class, 'getProductByCategory'])->name('category.product');
+
+Route::post('/store/coupon', [CouponController::class, 'storeCoupon'])->name('store.coupon');
+Route::delete('/remove/coupon', [CouponController::class, 'destroyCoupon'])->name('destroy.coupon');

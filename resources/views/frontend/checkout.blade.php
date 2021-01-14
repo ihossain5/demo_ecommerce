@@ -4,7 +4,7 @@
    
 @if (count($carts)>0)
     
-
+<x-alert/>
     <h1 class="checkout-heading stylish-heading">Checkout</h1>
     <div class="checkout-section">
         <div>
@@ -103,8 +103,8 @@
                         <img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-1.jpg" alt="item" class="checkout-table-img">
                         <div class="checkout-item-details">
                             <div class="checkout-table-item">{{$cart->product->name}}</div>
-                            <div class="checkout-table-description">{{$cart->product->description}}</div>
-                            <div class="checkout-table-price">${{$cart->product->price}}</div>
+                            <div class="checkout-table-description">{!! $cart->product->description !!}</div>
+                            <div class="checkout-table-price">${{$cart->total_price}}</div>
                         </div>
                     </div> <!-- end checkout-table -->
 
@@ -115,20 +115,51 @@
                 
             </div> <!-- end checkout-table -->
 
+        
+            @endforeach
             <div class="checkout-totals">
                 <div class="checkout-totals-left">
+                    Subtotal <br>
                   
+                    @if (session()->has('coupon'))
+                    Discount ({{ session()->get('coupon')['name'] }})
+                        <form action="{{route('destroy.coupon')}}" method="POST" style="display: inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" style="font-size: 14px">Remove</button>
+                        </form>
+                      <br>
+                      <hr>
+                      New Subtotal <br>
+                    @endif 
+                    <hr>
                     <span class="checkout-totals-total">Total</span>
 
                 </div>
 
                 <div class="checkout-totals-right">
-                  
-                    <span class="checkout-totals-total">${{$cart->product->price * $cart->quantity }}</span>
+                    {{$total_price}} <br>
+                    @if (session()->has('coupon'))
+               -{{ $discount }}  <br> <hr>
+                    {{$newSubTotal}} <br>
+                    @endif  
+
+                    <hr>
+                    <span class="checkout-totals-total">{{$newTotal}}</span>
 
                 </div>
-            </div> <!-- end checkout-totals -->
-            @endforeach
+            </div> 
+            @if (!session()->has('coupon'))
+                 
+            <a href="#" class="have-code">Have a Code?</a>
+
+            <div class="have-code-container">
+                <form action="{{route('store.coupon')}}" method="POST">@csrf 
+                    <input type="text" name="coupon_code" id="coupon_code">
+                    <button type="submit" class="button button-plain">Apply</button>
+                </form>
+            </div> <!-- end have-code-container -->
+            @endif
+            
         </div>
 
     </div> <!-- end checkout-section -->
