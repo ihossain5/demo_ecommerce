@@ -15,7 +15,7 @@ class CouponController extends Controller {
     public function storeCoupon(Request $request) {
         $coupon = Coupon::where('coupon_code', $request->coupon_code)->first();
         if (!$coupon) {
-            return redirect()->back()->withErrors('Invalid coupon code. Please try again.');
+            return redirect()->back()->with('error', 'Invalid coupon code. Please try again.');
         }
         $request->session()->put('coupon', [
             'name'     => $coupon->coupon_code,

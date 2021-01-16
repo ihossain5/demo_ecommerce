@@ -19,8 +19,9 @@
         <div class="sidebar">
             
         </div> <!-- end sidebar -->
-        <div>
+        <div><div id="message"></div>
             <div class="products-header">
+                
                 <h1 class="stylish-heading">All product</h1>               
             </div>
 

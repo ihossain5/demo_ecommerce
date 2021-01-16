@@ -45,8 +45,8 @@ Route::get('/checkout', [CouponController::class, 'checkOut'])->name('checkout')
 
 Route::post('/cart/add/{id}', [CartController::class, 'AddCart']);
 
-Route::post('checkout/order', [OrderController::class, 'newOrder'])->name('order.new');
-Route::get('/order/', [OrderController::class, 'getOrder'])->name('order.get');
+Route::post('/cart/checkout/', [OrderController::class, 'newOrder'])->name('order.new');
+Route::get('/order/', [OrderController::class, 'getOrder'])->name('order.index');
 
 Route::get('/category/{id}/products', [ProductController::class, 'getProductByCategory'])->name('category.product');
 

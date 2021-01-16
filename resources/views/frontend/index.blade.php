@@ -12,7 +12,7 @@
     </div>
 </div> <!-- end breadcrumbs -->
 
-<div id="message"></div>
+
 
 
     <div class="products-section container">
@@ -26,10 +26,10 @@
             </ul>
         </div> <!-- end sidebar -->
         <div>
+            <div id="message"></div>
             <div class="products-header">
                 <h1 class="stylish-heading">All product</h1>               
             </div>
-
             <div class="products text-center">
                 @foreach ($products as $product)
                     <div class="product border border-secondary p-3">

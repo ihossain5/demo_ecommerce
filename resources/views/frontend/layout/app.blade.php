@@ -50,7 +50,7 @@
       <div class="top-nav-right ">
            <ul> 
               @auth
-              <li><a href="{{route('order.get')}}">Order</a></li>
+              <li><a href="{{route('order.index')}}">Order</a></li>
               <li>
                 <a href="{{ route('logout') }}"onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
@@ -78,14 +78,15 @@
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Cart Items (<span class="cart"> {{$total}}</span> )
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">           
-                @foreach ($carts as $cart)
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">                          
+                @foreach ($carts as $cart)                
                 <li>
                   <img src="{{asset('/storage/products/'.$cart->product->image)}}" alt="" width="40">
                   <span class="item-name ">{{$cart->product->name}}</span> 
                   <span class="item-quantity">Quantity: {{$cart->quantity}}</span>
                 </li>
                 @endforeach 
+              
                 <a href="{{route('cart.show')}}" class="button mt-5">View Cart</a>  
               </ul>
               @else
@@ -137,8 +138,9 @@
     {  
       if (response.success) {
         $('#message').append(
-        '<div class="alert alert-success">'+
+        '<div class="alert alert-success alert-dismissible shadow mb-5 fade show" role="alert">'+
               response.success+
+              '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' + '</button>'+
         '</div>'
       );
       $('.cart').html(response.cartItem);

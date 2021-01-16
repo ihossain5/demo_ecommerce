@@ -116,6 +116,7 @@ class CartController extends Controller {
             $cartItem = Cart::where('user_id', $user_id)->count();
 
         }
+
         return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem]);
 
     }

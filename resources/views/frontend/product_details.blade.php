@@ -1,7 +1,7 @@
 @extends('frontend.layout.app')
 @section('content')
     
-    
+  
 <div class="breadcrumbs">
     <div class="breadcrumbs-container container">
         <div>
@@ -16,10 +16,8 @@
     </div>
 </div> <!-- end breadcrumbs -->
 
-    <x-alert/>
-
     <div class="container">
-        
+        <div id="message" class="mt-5"></div>
             </div>
     
     <div class="product-section container">

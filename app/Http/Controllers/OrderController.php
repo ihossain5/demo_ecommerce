@@ -14,10 +14,11 @@ class OrderController extends Controller {
         $total = $allCarts->sum('total_price');
 
         if (session()->has('coupon')) {
-            $discount    = session()->get('coupon')['discount'] ?? 0;
+            $discount    = session()->get('coupon')['discount'];
             $totalAmount = $total - $discount;
         } else {
             $totalAmount = $total;
+            $discount    = 0;
         }
 
         foreach ($allCarts as $cart) {
@@ -25,8 +26,10 @@ class OrderController extends Controller {
 
             $order->product_id     = $cart['product_id'];
             $order->user_id        = $cart['user_id'];
-            $order->total_price    = $totalAmount;
+            $order->price          = $cart['total_price'];
             $order->quantity       = $cart['quantity'];
+            $order->discount       = $discount;
+            $order->total_price    = $totalAmount;
             $order->name           = $request->name;
             $order->email          = $request->email;
             $order->address        = $request->address;
@@ -39,7 +42,7 @@ class OrderController extends Controller {
             $cart->delete();
         }
 
-        return redirect()->to('/')->with('success', 'Thanks for your order');
+        return redirect()->route('order.index')->with('success', 'Thanks for your order');
 
     }
 

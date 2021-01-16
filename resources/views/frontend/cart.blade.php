@@ -15,9 +15,10 @@
 <div class="cart-section container">
     <div>       
     @if (session()->has('success'))
-        <div class="alert alert-success shadow-lg p-3">
-            {{session('success')}}
-        </div>
+    <div class="alert alert-info alert-dismissible fade show shadow mb-5" role="alert">
+        {{session('success')}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     @endif
     @auth
         

@@ -22,6 +22,8 @@ class CreateOrdersTable extends Migration {
             $table->string('city');
             $table->string('phone');
             $table->integer('quantity');
+            $table->string('price');
+            $table->string('discount')->nullable();
             $table->string('total_price');
             $table->timestamps();
         });
