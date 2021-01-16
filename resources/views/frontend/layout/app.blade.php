@@ -39,79 +39,66 @@
 
 
 <body class="">
-    <header>
-
-<div class="top-nav container">
+<header>
+   <div class="top-nav container">
       <div class="top-nav-left">
           <div class="logo"><a href="/">Ecommerce</a></div>
              <ul>
                 <li><a href="{{route('products.index')}}"> Shop</a></li>          
              </ul>
-
-            </div>
-    <div class="top-nav-right ">
-        
+      </div>
+      <div class="top-nav-right ">
            <ul> 
-                    @auth
-                <li><a href="{{route('order.get')}}">Order</a></li>
-                <li><a href="{{ route('logout') }}"onclick="event.preventDefault();
+              @auth
+              <li><a href="{{route('order.get')}}">Order</a></li>
+              <li>
+                <a href="{{ route('logout') }}"onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                 @csrf
                             </form>
-                </li>  
+              </li>  
                     @else
                           <li><a href="{{route('register')}}">Sign Up</a></li>
                         <li><a href="{{route('login')}}">Login</a></li>
-                  @endauth
-
-    
+              @endauth
            </ul>
-           
-
-        </div>
-                
+        </div>         
     </div> <!-- end top-nav -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light float-sm-end">
-        <div class="container-fluid">
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-              <li class="nav-item dropdown ">
-                @auth
-                <a class="nav-link dropdown-toggle " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   Cart Items (<span class="cart"> {{$total}}</span> )                 
-                </a>  @else 
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">        
+          <ul class="navbar-nav">                 
+            <li class="nav-item dropdown">
+              @auth
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Cart Items (<span class="cart"> {{$total}}</span> )
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">           
+                @foreach ($carts as $cart)
                 <li>
-                  <a class="nav-link dropdown-toggle " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Cart Items 
-                  </a>
-              </li>   @endauth
-                 
-                @if (!$carts == null) 
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="margin-left: -320px;">
-                  <li>
-                      <a class="dropdown-item" href="#">
-                        <ul class="shopping-cart-items ">                           
-                            @foreach ($carts as $cart)
-                            <li class="clearfix ">
-                              <img src="{{asset('/storage/products/'.$cart->product->image)}}" alt="item1" height="40"/>
-                              <span class="item-name ">{{$cart->product->name}}</span>                         
-                              <span class="item-quantity">Quantity: {{$cart->quantity}}</span>
-                            </li>
-                           
-                          </ul>
-                          <a href="{{route('cart.show')}}" class="button mt-5">View Cart</a>
-                          @endforeach 
-                          
-                        </a>
-                   </li>         
-                </ul> @endif
-              </li>
-            </ul>
-          </div>
+                  <img src="{{asset('/storage/products/'.$cart->product->image)}}" alt="" width="40">
+                  <span class="item-name ">{{$cart->product->name}}</span> 
+                  <span class="item-quantity">Quantity: {{$cart->quantity}}</span>
+                </li>
+                @endforeach 
+                <a href="{{route('cart.show')}}" class="button mt-5">View Cart</a>  
+              </ul>
+              @else
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Cart Items 
+              </a>
+              @endauth
+              
+            </li>
+          </ul>
         </div>
-      </nav>
+      </div>
+    </nav>
 </header>
 
 @yield('content')
@@ -137,9 +124,8 @@
   $(document).on('submit', '#addToCart', function(event){
   event.preventDefault();
   var id = $(this).data('id');
- 
- 
-   $.ajax({
+
+    $.ajax({
     url:"{{url('/cart/add/')}}/"+id,
     method:"POST",
     data: new FormData(this),
@@ -148,13 +134,25 @@
     processData: false,
     dataType:"json",
     success:function(response)
-    {
-      alert(response.success);
-      console.log(response);
+    {  
+      if (response.success) {
+        $('#message').append(
+        '<div class="alert alert-success">'+
+              response.success+
+        '</div>'
+      );
       $('.cart').html(response.cartItem);
+      }
+    
+      
+      console.log(response);
+      
 
     }//success end
+   
+    
   });
+
  
 });
     </script>

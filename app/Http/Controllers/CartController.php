@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller {
 
+    public function userCart() {
+        return auth()->user()->carts;
+    }
+
     //count cart item
     static function cartItem() {
         if (auth()->user()) {
@@ -23,9 +27,9 @@ class CartController extends Controller {
     // view all cart item
     public function viewCart() {
         if (auth()->user()) {
-            $user_id     = auth()->user()->id;
-            $carts       = Cart::where('user_id', $user_id)->get();
-            $total_price = Cart::where('user_id', $user_id)->sum('total_price'); //get total price
+            $carts       = $this->userCart();
+            $carts       = $this->userCart();
+            $total_price = $this->userCart()->sum('total_price'); //get total price
             return view('frontend.cart', compact('carts', 'total_price'));
         } else {
             return view('frontend.cart');
@@ -56,28 +60,63 @@ class CartController extends Controller {
     }
 
     public function AddCart(Request $request) {
-        if (Auth::check()) {
-            $product  = Product::where('id', $request->product_id)->first();
-            $quantity = $request->quantity;
-            $data     = array();
+        // $user_id = auth()->user()->id;
+        // // $carts   = Cart::where('product_id', $request->product_id)
+        // //     ->where('user_id', $user_id)->get();
 
-            $user_id             = auth()->user()->id;
-            $data['user_id']     = $user_id;
-            $data['product_id']  = $product->id;
-            $data['quantity']    = $quantity;
-            $data['total_price'] = $product->price * $quantity;
+        // $carts = $this->userCart();
 
-            Cart::create($data);
+        // if (!$carts->isEmpty()) {
+        //     $product_id = $request->product_id;
+        //     dd($carts);
+        //     if (isset($carts[$product_id])) {
+        //         $cart              = new Cart;
+        //         $quantity          = $request->quantity;
+        //         $cart->quantity    = $quantity;
+        //         $cart->total_price = 12;
+        //         $cart->update();
 
-            if (auth()->user()) {
-                $user_id  = auth()->user()->id;
-                $cartItem = Cart::where('user_id', $user_id)->count();
+        //     }
 
-            }
-            return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem]);
-        } else {
+        // } else {
+        //     $product  = Product::where('id', $request->product_id)->first();
+        //     $quantity = $request->quantity;
+        //     $data     = array();
+
+        //     $user_id             = auth()->user()->id;
+        //     $data['user_id']     = $user_id;
+        //     $data['product_id']  = $product->id;
+        //     $data['quantity']    = $quantity;
+        //     $data['total_price'] = $product->price * $quantity;
+
+        //     Cart::create($data);
+
+        //     if (auth()->user()) {
+        //         $user_id  = auth()->user()->id;
+        //         $cartItem = Cart::where('user_id', $user_id)->count();
+
+        //     }
+        //     return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem]);
+        // }
+
+        $product  = Product::where('id', $request->product_id)->first();
+        $quantity = $request->quantity;
+
+        $cart = Cart::updateOrCreate([
+            'product_id' => $request->product_id,
+            'user_id'    => auth()->user()->id,
+        ],
+            ['quantity'   => $quantity,
+
+                'total_price' => $product['price'] * $quantity,
+            ]);
+
+        if (auth()->user()) {
+            $user_id  = auth()->user()->id;
+            $cartItem = Cart::where('user_id', $user_id)->count();
 
         }
+        return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem]);
 
     }
 

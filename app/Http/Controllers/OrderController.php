@@ -3,27 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
-use App\Models\Cart;
 use App\Models\Order;
 
 class OrderController extends Controller {
     public function newOrder(OrderRequest $request) {
 
-        $user_id  = auth()->user()->id;
-        $allCarts = Cart::where('user_id', $user_id)->get();
+        // $allCarts = Cart::where('user_id', $user_id)->sum('total_price');
+        $allCarts = auth()->user()->carts;
+
+        $total = $allCarts->sum('total_price');
+
+        if (session()->has('coupon')) {
+            $discount    = session()->get('coupon')['discount'] ?? 0;
+            $totalAmount = $total - $discount;
+        } else {
+            $totalAmount = $total;
+        }
 
         foreach ($allCarts as $cart) {
             $order = new Order();
 
-            if (session()->has('coupon')) {
-                $discount           = session()->get('coupon')['discount'] ?? 0;
-                $order->total_price = $cart['total_price'] - $discount;
-            } else {
-                $order->total_price = $cart['total_price'];
-            }
-            $order->product_id = $cart['product_id'];
-            $order->user_id    = $cart['user_id'];
-
+            $order->product_id     = $cart['product_id'];
+            $order->user_id        = $cart['user_id'];
+            $order->total_price    = $totalAmount;
             $order->quantity       = $cart['quantity'];
             $order->name           = $request->name;
             $order->email          = $request->email;
@@ -34,7 +36,7 @@ class OrderController extends Controller {
             $order->save();
 
             session()->forget('coupon');
-            Cart::where('user_id', $user_id)->delete();
+            $cart->delete();
         }
 
         return redirect()->to('/')->with('success', 'Thanks for your order');

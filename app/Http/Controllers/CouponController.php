@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CouponController extends Controller {
-    protected function totalAmount() {
-        $user_id     = auth()->user()->id;
-        $total_price = Cart::where('user_id', $user_id)->sum('total_price'); //get total price
+    public function totalAmount() {
+        $total_price = auth()->user()->carts->sum('total_price'); //get total price
         return $total_price;
     }
 
@@ -35,19 +33,17 @@ class CouponController extends Controller {
     // show cart item into checkout page
     public function checkOut() {
         if (Auth::user()) {
-            $user_id = auth()->user()->id;
+            $carts       = auth()->user()->carts;
+            $totalAmount = $this->totalAmount(); //get total price
+
+            $discount    = session()->get('coupon')['discount'] ?? 0;
+            $newSubTotal = $totalAmount - $discount;
+            // $newVat      = round(($newSubTotal * 15) / 100);
+            $newTotal = $newSubTotal;
+
+            return view('frontend.checkout', compact('carts', 'totalAmount', 'discount', 'newSubTotal', 'newTotal'));
         } else {
-            return redirect('login');
+            return view('frontend.checkout');
         }
-
-        $carts       = Cart::where('user_id', $user_id)->get();
-        $total_price = $this->totalAmount(); //get total price
-
-        $discount    = session()->get('coupon')['discount'] ?? 0;
-        $newSubTotal = $total_price - $discount;
-        // $newVat      = round(($newSubTotal * 15) / 100);
-        $newTotal = $newSubTotal;
-
-        return view('frontend.checkout', compact('carts', 'total_price', 'discount', 'newSubTotal', 'newTotal'));
     }
 }

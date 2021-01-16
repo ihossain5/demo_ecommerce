@@ -12,7 +12,8 @@
     </div>
 </div> <!-- end breadcrumbs -->
 
-<x-alert/>
+<div id="message"></div>
+
 
     <div class="products-section container">
         
@@ -46,7 +47,7 @@
                             </form>  --}}
                             
                             <form action="" id="addToCart" data-id="{{$product->id}}"> @csrf              
-                                <input type="number" class="form-control" name="quantity" >
+                                <input type="number" class="form-control" name="quantity" id="quantity">
                                 <input type="hidden" name="product_id" value="{{$product->id}}">
                                 {{-- <input type="hidden" name="product_price" value="{{$product->price}}"> --}}
                                 <button  type="submit" class="btn btn-sm btn-outline-success" style="margin-left: 20px;">Add to Cart</button>

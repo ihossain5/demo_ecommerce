@@ -137,7 +137,7 @@
                 </div>
 
                 <div class="checkout-totals-right">
-                    {{$total_price}} <br>
+                    {{$totalAmount}} <br>
                     @if (session()->has('coupon'))
                -{{ $discount }}  <br> <hr>
                     {{$newSubTotal}} <br>
