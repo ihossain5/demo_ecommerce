@@ -42,7 +42,7 @@ class OrderController extends Controller {
             $cart->delete();
         }
 
-        return redirect()->route('order.index')->with('success', 'Thanks for your order');
+        return redirect()->to('/')->with('success', 'Thanks for your order');
 
     }
 

@@ -40,7 +40,7 @@
                   <td>{{$category->name}}</td>
                   <td>{{$category->description}}</td>
                   <td>
-                    <button class="btn btn-secondary" data-name="{{$category->name}}" data-desc="{{$category->description}}" data-toggle="modal" data-target="#editModal">Edit</button>
+                    <button class="btn btn-secondary" onclick="editCategory({{$category->id}})" data-toggle="modal" data-target="#editModal">Edit</button>
                   </td>
                   <td>
                       
@@ -110,14 +110,14 @@
          </button>
        </div>
        <div class="modal-body">
-         <form action="{{route('category.store')}}" method="POST">@csrf
+         <form action="{{route('category.update',[$category->id])}}" method="POST">@csrf @method('PUT')
             <div class="form-group">
               <label for="name">Category Name</label>
-              <input type="text" name="name" id="name" class="form-control">         
+              <input type="text" name="name" id="edit_name" class="form-control">         
             </div>
             <div class="form-group">
               <label for="desc">Category Description</label>
-              <input type="text" name="description" id="desc" class="form-control ">
+              <input type="text" name="description" id="edit_desc" class="form-control ">
             </div>
             <div class="modal-footer d-grid gap-2 ">
               <button type="button" class="btn btn-info " data-dismiss="modal">Close</button>
@@ -131,6 +131,25 @@
  </div>
 
 
+<script>
+  function editCategory(id) {
+    
+    $.ajax({
+        url:"{{url('/category/edit/')}}/"+id,
+        type: "GET",
+        contentType: false,
+        cache:false,
+        processData: false,
+        dataType:"json",
 
+        success: function(response) {
+            $("#editModal").modal("toggle");
+            $("#id").val(response.id);
+            $("#edit_name").val(response.name);
+            $("#edit_desc").val(response.description);
+        }
+    });
+}
+</script>
 
 @endsection

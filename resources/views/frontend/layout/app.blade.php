@@ -78,7 +78,7 @@
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Cart Items (<span class="cart"> {{$total}}</span> )
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">                          
+              <ul class="dropdown-menu cart_drop" aria-labelledby="navbarDropdownMenuLink">                          
                 @foreach ($carts as $cart)                
                 <li>
                   <img src="{{asset('/storage/products/'.$cart->product->image)}}" alt="" width="40">
@@ -126,6 +126,8 @@
   event.preventDefault();
   var id = $(this).data('id');
 
+
+
     $.ajax({
     url:"{{url('/cart/add/')}}/"+id,
     method:"POST",
@@ -134,8 +136,10 @@
     cache:false,
     processData: false,
     dataType:"json",
+  
     success:function(response)
-    {  
+    { 
+ 
       if (response.success) {
         $('#message').append(
         '<div class="alert alert-success alert-dismissible shadow mb-5 fade show" role="alert">'+
@@ -143,9 +147,29 @@
               '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' + '</button>'+
         '</div>'
       );
+
       $('.cart').html(response.cartItem);
-      }
+
     
+      $('.cart_drop').append(
+        "<li><img src='/storage/products/"+response.data.product_image+"' style='width: 40px;'>"
+        +"<span class='item-name'>"+response.data.product_name+"</span>"
+        +"<span class='item-name'>"+response.data.quantity+"</span>"+
+        "</li>"
+        
+        );
+
+      }
+
+      if (response.error) {
+        $('#message').append(
+        '<div class="alert alert-danger alert-dismissible shadow mb-5 fade show" role="alert">'+
+              response.error+
+              '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' + '</button>'+
+        '</div>'
+      );
+      }
+
       
       console.log(response);
       

@@ -32,6 +32,8 @@ Route::get('/admin/dashboard', function () {
 });
 
 Route::resource('category', CategoryController::class);
+Route::get('/category/edit/{id}', [CategoryController::class, 'edit']);
+
 Route::resource('subcategory', SubCategoryController::class);
 Route::get('/subcategories/{id}', [SubCategoryController::class, 'loadSubCategory']);
 Route::resource('products', ProductController::class);

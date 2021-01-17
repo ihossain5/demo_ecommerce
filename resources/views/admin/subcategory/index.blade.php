@@ -37,7 +37,9 @@
                 <tr>
                   <td>{{$key+1}}</td>
                   <td>{{$subcategory->name}}</td>
-                  <td><button class="btn btn-secondary">Edit</button></td>
+                  <td>
+                    <button class="btn btn-secondary" data-toggle="modal" data-target="editModal" onclick="editSubCategory({{$subcategory->id}})">Edit</button>
+                  </td>
                   <td>
                       
                       <form action="{{route('subcategory.destroy',[$subcategory->id])}}" method="POST">@csrf
@@ -62,7 +64,7 @@
   </div>
 
 
-   <!-- Modal Center -->
+   <!-- Add Modal  -->
    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
@@ -105,4 +107,52 @@
      </div>
    </div>
  </div>
+
+   <!-- Edit Modal  -->
+   <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalCenterTitle">Edit category</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <form action="{{route('subcategory.update',[$subcategory->id])}}" method="POST">@csrf @method('PUT')
+            <div class="form-group">
+              <label for="name">Category Name</label>
+              <input type="text" name="name" id="edit_name" class="form-control">         
+            </div>
+            <div class="form-group">
+              <label for="desc">Category Description</label>
+              <input type="text" name="description" id="edit_desc" class="form-control ">
+            </div>
+            <div class="modal-footer d-grid gap-2 ">
+              <button type="button" class="btn btn-info " data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+       </div>
+       
+     </div>
+   </div>
+ </div>
+
+
+ <script>
+   $.ajax({
+     url: "{{url('/subcategory/edit/')}}/"+id," 
+     type:"GET",
+     contentType: false,
+     cache:false,
+     processData: false,
+     dataType:"json",
+
+     sussess:function(response){
+        ("#editModal").modal("toggle")
+     }
+   });
+ </script>
 @endsection

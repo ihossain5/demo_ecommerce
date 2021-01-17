@@ -112,7 +112,7 @@
             <div class="checkout-table">
                                     <div class="checkout-table-row">
                     <div class="checkout-table-row-left">
-                        <img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-1.jpg" alt="item" class="checkout-table-img">
+                        <img src="{{asset('storage/products/'.$cart->product->image)}}" alt="item" class="checkout-table-img">
                         <div class="checkout-item-details">
                             <div class="checkout-table-item">{{$cart->product->name}}</div>
                             <div class="checkout-table-description">{!! $cart->product->description !!}</div>
@@ -134,7 +134,7 @@
                     Subtotal <br>
                   
                     @if (session()->has('coupon'))
-                    Discount ({{ session()->get('coupon')['name'] }})
+                    Discount ({{ session()->get('coupon')['discount'] }})
                         <form action="{{route('destroy.coupon')}}" method="POST" style="display: inline">
                             @csrf @method('DELETE')
                             <button type="submit" style="font-size: 14px">Remove</button>

@@ -53,8 +53,9 @@ class CategoryController extends Controller {
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category) {
-        //
+    public function edit($id) {
+        $category = Category::find($id);
+        return response()->json($category);
     }
 
     /**
@@ -64,8 +65,9 @@ class CategoryController extends Controller {
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category) {
-        //
+    public function update(StoreCategoryRequest $request, Category $category) {
+        $category->update($request->all());
+        return redirect()->back()->with('success', 'Category has been updated');
     }
 
     /**

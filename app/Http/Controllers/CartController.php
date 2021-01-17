@@ -60,65 +60,35 @@ class CartController extends Controller {
     }
 
     public function AddCart(Request $request) {
-        // $user_id = auth()->user()->id;
-        // // $carts   = Cart::where('product_id', $request->product_id)
-        // //     ->where('user_id', $user_id)->get();
+        if (Auth::check()) {
+            $product  = Product::where('id', $request->product_id)->first();
+            $quantity = $request->quantity;
 
-        // $carts = $this->userCart();
+            $cart = Cart::updateOrCreate([
+                'product_id' => $request->product_id,
+                'user_id'    => auth()->user()->id,
+            ],
+                ['quantity'   => $quantity,
 
-        // if (!$carts->isEmpty()) {
-        //     $product_id = $request->product_id;
-        //     dd($carts);
-        //     if (isset($carts[$product_id])) {
-        //         $cart              = new Cart;
-        //         $quantity          = $request->quantity;
-        //         $cart->quantity    = $quantity;
-        //         $cart->total_price = 12;
-        //         $cart->update();
+                    'total_price' => $product['price'] * $quantity,
+                ]);
 
-        //     }
+            if (auth()->user()) {
+                $user_id  = auth()->user()->id;
+                $cartItem = Cart::where('user_id', $user_id)->count();
 
-        // } else {
-        //     $product  = Product::where('id', $request->product_id)->first();
-        //     $quantity = $request->quantity;
-        //     $data     = array();
+            }
+            $data                  = array();
+            $data['product_id']    = $request->product_id;
+            $data['quantity']      = $quantity;
+            $data['product_image'] = $product->image;
+            $data['product_name']  = $product->name;
 
-        //     $user_id             = auth()->user()->id;
-        //     $data['user_id']     = $user_id;
-        //     $data['product_id']  = $product->id;
-        //     $data['quantity']    = $quantity;
-        //     $data['total_price'] = $product->price * $quantity;
+            return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem, 'data' => $data]);
 
-        //     Cart::create($data);
-
-        //     if (auth()->user()) {
-        //         $user_id  = auth()->user()->id;
-        //         $cartItem = Cart::where('user_id', $user_id)->count();
-
-        //     }
-        //     return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem]);
-        // }
-
-        $product  = Product::where('id', $request->product_id)->first();
-        $quantity = $request->quantity;
-
-        $cart = Cart::updateOrCreate([
-            'product_id' => $request->product_id,
-            'user_id'    => auth()->user()->id,
-        ],
-            ['quantity'   => $quantity,
-
-                'total_price' => $product['price'] * $quantity,
-            ]);
-
-        if (auth()->user()) {
-            $user_id  = auth()->user()->id;
-            $cartItem = Cart::where('user_id', $user_id)->count();
-
+        } else {
+            return response()->json(['error' => ' Login to add item']);
         }
-
-        return response()->json(['success' => 'product added to cart', 'cartItem' => $cartItem]);
-
     }
 
 }

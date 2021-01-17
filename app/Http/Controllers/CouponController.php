@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CouponController extends Controller {
     public function totalAmount() {
-        $total_price = auth()->user()->carts->sum('total_price'); //get total price
-        return $total_price;
+        return $total_price = auth()->user()->carts->sum('total_price'); //get total price
     }
 
     public function storeCoupon(Request $request) {
